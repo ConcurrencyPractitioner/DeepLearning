@@ -22,13 +22,13 @@ public:
 	virtual ~NeuralNode();
 	double computeResult(vector<double> inputs);
 	vector<double> calculateGradient(vector<double> inputs,
-									 vector<vector<double> > matrix,
-									 vector<double> output);
+					 vector<vector<double> > matrix,
+					 vector<double> output);
 	void train(vector<vector<double> > inputs, vector<double> outputs, double epochs);
 	void newtonTrain(vector<vector<double> > inputs, vector<double> output, int epochs);
 	static vector<vector<double> > computeHessian(vector<vector<double> > initHessian,
-												  vector<double> xDelta,
-												  vector<double> gradientDelta);
+						      vector<double> xDelta,
+						      vector<double> gradientDelta);
 };
 
 #endif /* NEURALNODE_H_ */
