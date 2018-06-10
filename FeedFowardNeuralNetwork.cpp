@@ -133,16 +133,6 @@ void FeedFowardNeuralNetwork::backPropagate(vector<vector<double> > inputs,
 	}
 }
 
-double averageChange(vector<double> xDelta) {
-	double sum = 0;
-	for (double i : xDelta) {
-		sum += i * i;
-	}
-	sum = sum / xDelta.size();
-	cout << "sum: " << pow(sum, 0.5) << endl;
-	return pow(sum, 0.5);
-}
-
 /**
  * An approximation of matrix Q in quadratic error function in the following equation:
  * f(x) = 1/2 * x * Q * x + x * B
