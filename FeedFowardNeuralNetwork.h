@@ -26,8 +26,8 @@ public:
 	void addLayer(int size, int weightCount, vector<vector<double> > weights);
 	vector<double> fowardPropagate(vector<double> inputs);
 	vector<vector<vector<double> > > calculateGradient(vector<double> inputs,
-													   vector<double> outputs,
-													   int stopLayer = 0);
+							   vector<double> outputs,
+							   int stopLayer = 0);
 	void backPropagate(vector<vector<double> > inputs, vector<vector<double> > outputs);
 	double determineRate(vector<vector<vector<double> > >& currGradients,
 						 vector<double> conjugateDirection, int i, int j,
