@@ -203,10 +203,8 @@ void FeedFowardNeuralNetwork::newtonBackPropagate(vector<vector<double> > inputs
 				conjugateDirections.push_back(conjugateDirectionList);
 				rates.push_back(layerRates);
 			}
-			int countX = 0;
 			for (int i = 0; i < nodes.size(); i++) {
 				for (int j = 0; j < nodes.at(i).size(); j++) {
-					countX++;
 					point = nodes.at(i).at(j).weights;
 					vector<vector<double> > currHessian = hessianMatrices.at(i).at(j);
 					vector<double> conjugateDirection =
