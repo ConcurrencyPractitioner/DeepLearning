@@ -134,8 +134,7 @@ void FeedFowardNeuralNetwork::backPropagate(vector<vector<double> > inputs,
 }
 
 /**
- * An approximation of matrix Q in quadratic error function in the following equation:
- * f(x) = 1/2 * x * Q * x + x * B
+ * Uses the secant method to perform a line search to reach target.
  */
 double FeedFowardNeuralNetwork::determineRate(vector<vector<vector<double> > > currGradients,
 		vector<double> conjugateDirection, int i, int j,
