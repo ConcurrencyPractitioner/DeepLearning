@@ -133,10 +133,6 @@ void FeedFowardNeuralNetwork::backPropagate(vector<vector<double> > inputs,
 	}
 }
 
-/**
- * An approximation of matrix Q in quadratic error function in the following equation:
- * f(x) = 1/2 * x * Q * x + x * B
- */
 double FeedFowardNeuralNetwork::determineRate(vector<vector<vector<double> > > currGradients,
 		vector<double> conjugateDirection, int i, int j,
 		vector<double> inputs, vector<double>  outputs) {
