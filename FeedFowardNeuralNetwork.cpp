@@ -133,6 +133,9 @@ void FeedFowardNeuralNetwork::backPropagate(vector<vector<double> > inputs,
 	}
 }
 
+/**
+* Secant method
+*/
 double FeedFowardNeuralNetwork::determineRate(vector<vector<vector<double> > > currGradients,
 		vector<double> conjugateDirection, int i, int j,
 		vector<double> inputs, vector<double>  outputs) {
