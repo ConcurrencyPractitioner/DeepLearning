@@ -171,9 +171,6 @@ double FeedFowardNeuralNetwork::determineRate(vector<vector<vector<double> > > c
 }
 
 /**
- * This does not work for all cases, as of yet. The Hessian matrix is not guaranteed to be positive
- * definite. Consequently, it does not converge if the error function is not close to the point.
- * This could be solved if we add a identity matrix multiplied by a factor which would make it so.
  * (This is a implementation of the DFP algorithm, not of the more popular BFGS. So occasionally,
  * might seem to converge slower than first order gradient descents.)
  */
