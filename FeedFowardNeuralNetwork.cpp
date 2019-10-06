@@ -146,8 +146,8 @@ vector<vector<vector<double> > > scaleToGradients(vector<vector<vector<double> >
 }
 
 void checkForScale(vector<vector<vector<double> > > gradients,
-				   vector<vector<vector<double> > >& momentVectors1,
-				   vector<vector<vector<double> > >& momentVectors2) {
+		vector<vector<vector<double> > >& momentVectors1,
+		vector<vector<vector<double> > >& momentVectors2) {
 	if (momentVectors1.size() == 0) {
 		momentVectors1 = scaleToGradients(gradients);
 		momentVectors2 = scaleToGradients(gradients);
@@ -159,11 +159,11 @@ void checkForScale(vector<vector<vector<double> > > gradients,
  * https://arxiv.org/pdf/1412.6980.pdf
  */
 void FeedFowardNeuralNetwork::adamOptimize(vector<vector<double> > inputs,
-										   vector<vector<double> > outputs,
-										   double stepSize = 0.001,
-										   double decayRate1 = 0.9,
-										   double decayRate2 = 0.999,
-										   double epsilon = 0.00000001) {
+		vector<vector<double> > outputs,
+		double stepSize = 0.001,
+		double decayRate1 = 0.9,
+		double decayRate2 = 0.999,
+		double epsilon = 0.00000001) {
 	vector<vector<vector<double> > > momentVectors1 = vector<vector<vector<double> > >();
 	vector<vector<vector<double> > > momentVectors2 = vector<vector<vector<double> > >();
 	int timestep = 0;
@@ -177,10 +177,10 @@ void FeedFowardNeuralNetwork::adamOptimize(vector<vector<double> > inputs,
 				vector<double> moment2 = momentVectors2[i][j];
 				vector<double> localGradient = gradients[i][j];
 				moment1 = helper.add(helper.reduce(moment1, decayRate1),
-						             helper.reduce(localGradient, 1.0 - decayRate1));
+						helper.reduce(localGradient, 1.0 - decayRate1));
 				vector<double> squaredGradient = helper.dotProduct(localGradient, localGradient);
 				moment2 = helper.add(helper.reduce(moment2, decayRate2),
-									 helper.reduce(squaredGradient, decayRate2));
+						helper.reduce(squaredGradient, decayRate2));
 				momentVectors1[i][j] = moment1;
 				momentVectors2[i][j] = moment2;
 				vector<double> biasCorrectedMoment1 =
@@ -189,8 +189,8 @@ void FeedFowardNeuralNetwork::adamOptimize(vector<vector<double> > inputs,
 						helper.reduce(moment2, 1.0 / (1.0 - pow(decayRate2, timestep)));
 				vector<double> gagedGradient =
 						helper.divide(biasCorrectedMoment1,
-									  helper.add(helper.sqrt(biasCorrectedMoment2),
-											  	 epsilon));
+								helper.add(helper.sqrt(biasCorrectedMoment2),
+										epsilon));
 				gagedGradient = helper.reduce(gagedGradient, stepSize);
 				for (int k = 0; k < gagedGradient.size(); k++) {
 					nodes.at(i).at(j).weights.at(k) -= gagedGradient[k];
@@ -201,8 +201,8 @@ void FeedFowardNeuralNetwork::adamOptimize(vector<vector<double> > inputs,
 }
 
 /**
-* Secant method
-*/
+ * Secant method
+ */
 double FeedFowardNeuralNetwork::determineRate(vector<vector<vector<double> > > currGradients,
 		vector<double> conjugateDirection, int i, int j,
 		vector<double> inputs, vector<double>  outputs) {
