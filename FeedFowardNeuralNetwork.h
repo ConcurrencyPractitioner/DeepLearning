@@ -38,6 +38,11 @@ public:
 	double activationFunction(double input);
 	double derivativeFunction(double input);
 	void modifyWeight(int layer, int index, int weightIndex, double newWeight);
+	void adamOptimize(vector<vector<double> > inputs, vector<vector<double> > outputs,
+					  double stepSize = 0.001,
+					  double decayRate1 = 0.9,
+					  double decayRate2 = 0.999,
+					  double epsilon = 0.00000001);
 };
 
 #endif /* FEEDFOWARDNEURALNETWORK_H_ */

@@ -9,6 +9,7 @@
 #include "NeuralNode.h"
 #include "MatrixOperations.h"
 #include <math.h>
+#include <cmath>
 #include <iostream>
 
 using namespace std;
@@ -127,6 +128,72 @@ void FeedFowardNeuralNetwork::backPropagate(vector<vector<double> > inputs,
 			for (int j = 0; j < nodes.at(i).size(); j++) {
 				for (int k = 0; k < nodes.at(i).at(j).weights.size(); k++) {
 					nodes.at(i).at(j).weights.at(k) -= stepSize * gradients.at(i).at(j).at(k);
+				}
+			}
+		}
+	}
+}
+
+vector<vector<vector<double> > > scaleToGradients(vector<vector<vector<double> > >& gradients) {
+	vector<vector<vector<double> > > emptyMomentVector = vector<vector<vector<double> > >();
+	for (int i = 0; i < gradients.size(); i++) {
+		emptyMomentVector.push_back(vector<vector<double> >());
+		for (int j = 0; j < gradients.at(i).size(); j++) {
+			emptyMomentVector.at(i).push_back(vector<double>(gradients.at(i).at(j).size(), 0));
+		}
+	}
+	return emptyMomentVector;
+}
+
+void checkForScale(vector<vector<vector<double> > > gradients,
+				   vector<vector<vector<double> > >& momentVectors1,
+				   vector<vector<vector<double> > >& momentVectors2) {
+	if (momentVectors1.size() == 0) {
+		momentVectors1 = scaleToGradients(gradients);
+		momentVectors2 = scaleToGradients(gradients);
+	}
+}
+
+/**
+ * ADAM optimizer: implemented based on the following paper in arxiv:
+ * https://arxiv.org/pdf/1412.6980.pdf
+ */
+void FeedFowardNeuralNetwork::adamOptimize(vector<vector<double> > inputs,
+										   vector<vector<double> > outputs,
+										   double stepSize = 0.001,
+										   double decayRate1 = 0.9,
+										   double decayRate2 = 0.999,
+										   double epsilon = 0.00000001) {
+	vector<vector<vector<double> > > momentVectors1 = vector<vector<vector<double> > >();
+	vector<vector<vector<double> > > momentVectors2 = vector<vector<vector<double> > >();
+	int timestep = 0;
+	for (int z = 0; z < inputs.size(); z++) {
+		vector<vector<vector<double> > > gradients = calculateGradient(inputs.at(z), outputs.at(z));
+		checkForScale(gradients, momentVectors1, momentVectors2);
+		timestep++;
+		for (int i = 0; i < gradients.size(); i++) {
+			for (int j = 0; j < gradients.at(i).size(); j++) {
+				vector<double> moment1 = momentVectors1[i][j];
+				vector<double> moment2 = momentVectors2[i][j];
+				vector<double> localGradient = gradients[i][j];
+				moment1 = helper.add(helper.reduce(moment1, decayRate1),
+						             helper.reduce(localGradient, 1.0 - decayRate1));
+				vector<double> squaredGradient = helper.dotProduct(localGradient, localGradient);
+				moment2 = helper.add(helper.reduce(moment2, decayRate2),
+									 helper.reduce(squaredGradient, decayRate2));
+				momentVectors1[i][j] = moment1;
+				momentVectors2[i][j] = moment2;
+				vector<double> biasCorrectedMoment1 =
+						helper.reduce(moment1, 1.0 / (1.0 - pow(decayRate1, timestep)));
+				vector<double> biasCorrectedMoment2 =
+						helper.reduce(moment2, 1.0 / (1.0 - pow(decayRate2, timestep)));
+				vector<double> gagedGradient =
+						helper.divide(biasCorrectedMoment1,
+									  helper.add(helper.sqrt(biasCorrectedMoment2),
+											  	 epsilon));
+				gagedGradient = helper.reduce(gagedGradient, stepSize);
+				for (int k = 0; k < gagedGradient.size(); k++) {
+					nodes.at(i).at(j).weights.at(k) -= gagedGradient[k];
 				}
 			}
 		}

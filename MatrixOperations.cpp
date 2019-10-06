@@ -7,6 +7,7 @@
 
 #include "MatrixOperations.h"
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -21,6 +22,28 @@ double MatrixOperations::dotProduct(vector<double>& vec1, vector<double>& vec2) 
 		sum += vec1.at(i) * vec2.at(i);
 	}
 	return sum;
+}
+
+vector<double> MatrixOperations::add(vector<double> vec, double increment) {
+	vector<double> res = vector<double>(res.size(), 0);
+	for (int i = 0; i < vec.size(); i++) res[i] = vec[i] + increment;
+	return res;
+}
+
+vector<double> MatrixOperations::divide(vector<double> vec1, vector<double> vec2) {
+	vector<double> res = vector<double>(vec1.size(), 0);
+	for (int i = 0; i < res.size(); i++) {
+		res[i] = vec1[i] / vec2[i];
+	}
+	return res;
+}
+
+vector<double> MatrixOperations::sqrt(vector<double> vec) {
+	vector<double> res = vector<double>(vec.size(), 0);
+	for (int i = 0; i < vec.size(); i++) {
+		res[i] = sqrt(vec[i]);
+	}
+	return res;
 }
 
 vector<double> MatrixOperations::reduce(vector<double> vec, double factor) {
